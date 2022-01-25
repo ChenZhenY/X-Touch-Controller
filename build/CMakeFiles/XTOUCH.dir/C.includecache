@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/urop/X-Touch-Controller/src/DJcontrollerLCM.c
+alsa/asoundlib.h
+-
+math.h
+-
+time.h
+-
+

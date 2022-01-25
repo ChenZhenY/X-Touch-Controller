@@ -24,14 +24,16 @@
 */
 
 #include <alsa/asoundlib.h>     /* Interface to the ALSA system */
-
 #include <math.h>
+#include <time.h>
 
 #define PI 3.14159265
 
 
 // function declarations:
 void   error(const char *format, ...);
+void delay_millis(int number_of_millis);
+
 char*  get_Xtouch_port(void);
 int    get_Xtouch_device_number (int card);
 void   reset_faders(snd_rawmidi_t* midiout);
@@ -55,29 +57,59 @@ int main(int argc, char *argv[]) {
    }
    
    reset_faders(midiout);
-   while (status != -EAGAIN) {
-      status = snd_rawmidi_read(midiin, buffer, 3);
-      if ((status < 0) && (status != -EBUSY) && (status != -EAGAIN)) {
-         error("Problem reading MIDI input: %s",snd_strerror(status));
-      } else if (status >= 0) {
-         count++;
-         printf("0x%x %x %x\n", buffer[0], buffer[1], buffer[2]);
-         if ((status = snd_rawmidi_write(midiout, buffer, 3)) < 0) {
-            error("Problem writing to MIDI output: %s", snd_strerror(status));
-         }
+   wave_demo(midiout);
+   // while (status != -EAGAIN) {
+   //    status = snd_rawmidi_read(midiin, buffer, 3);
+   //    if ((status < 0) && (status != -EBUSY) && (status != -EAGAIN)) {
+   //       error("Problem reading MIDI input: %s",snd_strerror(status));
+   //    } else if (status >= 0) {
+   //       count++;
+   //       printf("0x%x %x %x\n", buffer[0], buffer[1], buffer[2]);
+   //       if ((status = snd_rawmidi_write(midiout, buffer, 3)) < 0) {
+   //          error("Problem writing to MIDI output: %s", snd_strerror(status));
+   //       }
 
-         // fflush(stdout);
-         if (count % 20 == 0) {
-            printf("count: %d\n", count);
-         }
-      }
-   }
+   //       // fflush(stdout);
+   //       if (count % 20 == 0) {
+   //          printf("count: %d\n", count);
+   //       }
+   //    }
+   // }
 
 
    snd_rawmidi_close(midiin);
    midiin  = NULL;    // snd_rawmidi_close() does not clear invalid pointer,
    midiout = NULL;    // so might be a good idea to erase it after closing.
    return 0;
+}
+
+void wave_demo(snd_rawmidi_t* midiout) {
+    
+    unsigned char fader[9][3] = {{0xE0, 60, 0},{0xE1, 60, 0},{0xE2, 60, 0},
+         {0xE3, 60, 0},{0xE4, 60, 0},{0xE5, 60, 0},{0xE6, 60, 0},{0xE7, 60, 0},{0xE8, 60, 0}};
+    
+    int status = -1;
+    int ctrl = 0;
+    float w = 0.1f;
+    float k = 2*PI/9;
+    float t = 0;
+    float wait = 1000;
+
+    while (1)
+    {
+        for (int i=0; i<1; i++) {
+           ctrl = (int)(8101 + 8100*sin(k*i-w*t/1000));
+            fader[i][2] = ctrl;
+            status = snd_rawmidi_write(midiout, fader[i], 3);
+            if (status<0){
+                error("Problem writing to MIDI output: %s", snd_strerror(status));
+                exit(1);
+            }
+        }
+        t+=wait;
+        delay_millis(wait);
+    }
+    
 }
 
 // get the device name for X-Touch
@@ -175,7 +207,7 @@ void reset_faders(snd_rawmidi_t* midiout) {
          exit(1);
       }
    }
-   sleep(0.3);
+   delay_millis(30);
 }
 
 // error -- print error message
@@ -186,4 +218,14 @@ void error(const char *format, ...) {
    vfprintf(stderr, format, ap);
    va_end(ap);
    putc('\n', stderr);
+}
+
+void delay_millis(int number_of_millis)
+{ 
+    // Storing start time
+    clock_t start_time = clock();
+  
+    // looping till required time is not achieved
+    while (clock() < start_time + number_of_millis)
+        ;
 }
