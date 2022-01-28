@@ -57,6 +57,7 @@ int main(int argc, char *argv[]) {
    }
    
    reset_faders(midiout);
+   sleep(1);
    wave_demo(midiout);
    // while (status != -EAGAIN) {
    //    status = snd_rawmidi_read(midiin, buffer, 3);
@@ -90,16 +91,23 @@ void wave_demo(snd_rawmidi_t* midiout) {
     
     int status = -1;
     int ctrl = 0;
-    float w = 0.1f;
+    int lsb = 0;
+    int msb = 0;
+    float w = 0.0006f;
     float k = 2*PI/9;
     float t = 0;
-    float wait = 1000;
+    float wait = 1;
 
     while (1)
     {
-        for (int i=0; i<1; i++) {
-           ctrl = (int)(8101 + 8100*sin(k*i-w*t/1000));
-            fader[i][2] = ctrl;
+        for (int i=0; i<9; i++) {
+            ctrl = (int)(8192 + 8191*sin(k*i-w*t));
+            // ctrl = t;
+            msb = (ctrl&16256)>>7; // (ctrl&(127<<7))>>7;
+            lsb = (ctrl&127); 
+
+            fader[i][2] = msb;
+            fader[i][1] = lsb;
             status = snd_rawmidi_write(midiout, fader[i], 3);
             if (status<0){
                 error("Problem writing to MIDI output: %s", snd_strerror(status));
@@ -107,7 +115,6 @@ void wave_demo(snd_rawmidi_t* midiout) {
             }
         }
         t+=wait;
-        delay_millis(wait);
     }
     
 }
@@ -207,7 +214,6 @@ void reset_faders(snd_rawmidi_t* midiout) {
          exit(1);
       }
    }
-   delay_millis(30);
 }
 
 // error -- print error message
@@ -220,12 +226,12 @@ void error(const char *format, ...) {
    putc('\n', stderr);
 }
 
-void delay_millis(int number_of_millis)
-{ 
-    // Storing start time
-    clock_t start_time = clock();
+// void delay_millis(int number_of_millis)
+// { 
+//     // Storing start time
+//     clock_t start_time = clock();
   
-    // looping till required time is not achieved
-    while (clock() < start_time + number_of_millis)
-        ;
-}
+//     // looping till required time is not achieved
+//     while (clock() < start_time + number_of_millis)
+//         ;
+// }

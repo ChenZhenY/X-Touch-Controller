@@ -1,1 +1,1 @@
-/usr/bin/cc -g  -rdynamic CMakeFiles/XTOUCH.dir/src/DJcontrollerLCM.c.o  -o XTOUCH  -L/usr/lib/x86_64-linux-gnu/gedit/plugins -Wl,-rpath,/usr/lib/x86_64-linux-gnu/gedit/plugins -lasound -lm -ltime 
+/usr/bin/cc -g -rdynamic CMakeFiles/XTOUCH.dir/src/DJcontrollerLCM.c.o -o XTOUCH   -L/usr/lib/x86_64-linux-gnu/gedit/plugins  -Wl,-rpath,/usr/lib/x86_64-linux-gnu/gedit/plugins -lasound -lm -ltime 
