@@ -58,7 +58,23 @@ int main(int argc, char *argv[]) {
    
    reset_faders(midiout);
    sleep(1);
-   wave_demo(midiout);
+   // wave_demo(midiout);
+
+   // unsigned char enable [9] = {0xf0, 0x00, 0x00, 0x66, 0x14, 0x20, 0x05, 0x07, 0xf7};
+   // unsigned char type [8]   = {0xf0, 0x00, 0x00, 0x66, 0x14, 0x21, 0x00, 0xf7};
+   unsigned char lcd [14] = {0xf0, 0x00, 0x00, 0x66, 0x14, 0x12, 0x38, 0x4c, 0x52, 0x4c, 0x52, 0x35, 0x30, 0xf7}; // num of char need to be right, 6 chars only
+   unsigned char word [3] = {0xb0, 0x47, 0x19};
+
+   // status = snd_rawmidi_write(midiout, enable, 9);
+   // status = snd_rawmidi_write(midiout, type, 8);
+
+   status = snd_rawmidi_write(midiout, lcd, 15);
+   if (status<0){
+         error("Problem writing to MIDI output: %s", snd_strerror(status));
+         exit(1);
+   }
+
+
    // while (status != -EAGAIN) {
    //    status = snd_rawmidi_read(midiin, buffer, 3);
    //    if ((status < 0) && (status != -EBUSY) && (status != -EAGAIN)) {

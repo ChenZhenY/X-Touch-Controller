@@ -1,8 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/XTOUCH.dir/src/DJcontrollerLCM.c.o"
-  "CMakeFiles/XTOUCH.dir/src/DJcontrollerLCM.c.o.d"
-  "XTOUCH"
   "XTOUCH.pdb"
+  "XTOUCH"
 )
 
 # Per-language clean rules from dependency scanning.
