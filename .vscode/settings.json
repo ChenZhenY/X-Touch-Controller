@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "time.h": "c"
+        "time.h": "c",
+        "asoundlib.h": "c",
+        "rawmidi.h": "c"
     }
 }
