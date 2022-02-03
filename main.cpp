@@ -15,8 +15,9 @@ int main(int argc, char *argv[]) {
     tuner.fader0.param = &Kp;
     tuner.fader3.param = &Kp;
 
-    while (true) {
-        status = tuner.update();
-    }
+    // while (true) {
+    //     status = tuner.update();
+    // }
+    tuner.wave_demo();
     
 }

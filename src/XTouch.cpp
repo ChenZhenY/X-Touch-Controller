@@ -9,7 +9,7 @@ XTouch::XTouch() {
       error("Problem opening MIDI input: %s", snd_strerror(status));
       exit(1);
     }
-    reset_faders(this->midiout);
+    reset_faders();
 
     // set up faders and parameters mapping
 
@@ -49,16 +49,16 @@ int XTouch::update(void) {
       this->fader8.set_val_now(buffer);
 
       // write display
-      unsigned char* msg = this->fader3.set_LCD_msg();
-      status = snd_rawmidi_write(midiout, msg, 15);
-      if (status<0){
-         error("Problem writing to MIDI output: %s", snd_strerror(status));
-      }
+      // unsigned char* msg = this->fader3.set_LCD_msg();
+      // status = snd_rawmidi_write(midiout, msg, 15);
+      // if (status<0){
+      //    error("Problem writing to MIDI output: %s", snd_strerror(status));
+      // }
    }
    return status;
 }
 
-void XTouch::wave_demo(snd_rawmidi_t* midiout) {
+void XTouch::wave_demo() {
     
     unsigned char fader[9][3] = {{0xE0, 60, 0},{0xE1, 60, 0},{0xE2, 60, 0},
          {0xE3, 60, 0},{0xE4, 60, 0},{0xE5, 60, 0},{0xE6, 60, 0},{0xE7, 60, 0},{0xE8, 60, 0}};
@@ -174,7 +174,7 @@ int XTouch::get_Xtouch_device_number(int card) {
    return -1;
 }
 
-void XTouch::reset_faders(snd_rawmidi_t* midiout) {
+void XTouch::reset_faders() {
    
    unsigned char zero[3] = {0xE0, 60, 0};
    int status = -1;

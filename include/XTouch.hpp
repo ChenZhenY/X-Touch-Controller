@@ -38,8 +38,8 @@ public:
     void   load_default_parameters(void);      // load default parameters
     // void   update_display(void);  update big LCD as menu if needed
 
-    void   wave_demo(snd_rawmidi_t* midiout);
-    void   reset_faders(snd_rawmidi_t* midiout);
+    void   wave_demo();
+    void   reset_faders();
     
     friend class Fader; // fader can write val and LCD
     // TODO: add objects in list

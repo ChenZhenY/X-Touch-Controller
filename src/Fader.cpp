@@ -35,7 +35,7 @@ double Fader::get_val_param_save(void) {
 
 char* Fader::set_LCD_msg(void) {
     // static unsigned char lcd [15] = {0xf0, 0x00, 0x00, 0x66, 0x14, 0x12, 0x38, 0x4c, 0x52, 0x4c, 0x52, 0x35, 0x30, 0x20, 0xf7};
-    static unsigned char msg [30];
+    // static unsigned char msg [30];
     unsigned char header_up[7]   = {0xf0, 0x00, 0x00, 0x66, 0x14, 0x12, 0x00};
     unsigned char header_down[7] = {0xf0, 0x00, 0x00, 0x66, 0x14, 0x12, 0x38};
     unsigned char content_up[8]  = {0,0,0,0,0,0,0,0};
@@ -44,15 +44,16 @@ char* Fader::set_LCD_msg(void) {
     header_down[6] = (this->channel-0xe0)*7 + 0x38;
     
     // msg sent follows ascii
-    const char* name = this->param->get_name().c_str();
-    strcat(content_up, name);
-    // TODO: add number conversion strcat(content_down) change to memcpy
-    content_up[7] = 0xf7;  // msg end bit
-    content_down[7] = 0xf7;
+    // const char* name = this->param->get_name().c_str();
+    // strcat(content_up, name);
+    // // TODO: add number conversion strcat(content_down) change to memcpy
+    // content_up[7] = 0xf7;  // msg end bit
+    // content_down[7] = 0xf7;
 
-    strcat(msg, header_up);
-    strcat(msg, content_up);
-    strcat(msg, header_down);
-    strcat(msg, content_down); 
+    // strcat(msg, header_up);
+    // strcat(msg, content_up);
+    // strcat(msg, header_down);
+    // strcat(msg, content_down);
+    char msg [10]; 
     return msg;
 }

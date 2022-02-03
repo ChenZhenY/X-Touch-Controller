@@ -1,3 +1,3 @@
-/home/yanran/X-Touch-Controller/build/CMakeFiles/XTOUCH.dir
-/home/yanran/X-Touch-Controller/build/CMakeFiles/edit_cache.dir
-/home/yanran/X-Touch-Controller/build/CMakeFiles/rebuild_cache.dir
+/home/urop/Documents/GitHub/X-Touch-Controller/build/CMakeFiles/rebuild_cache.dir
+/home/urop/Documents/GitHub/X-Touch-Controller/build/CMakeFiles/XTOUCH.dir
+/home/urop/Documents/GitHub/X-Touch-Controller/build/CMakeFiles/edit_cache.dir

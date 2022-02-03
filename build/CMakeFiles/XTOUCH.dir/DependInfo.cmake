@@ -1,17 +1,19 @@
-
-# Consider dependencies only in project.
-set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
-
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
+  "CXX"
   )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/urop/Documents/GitHub/X-Touch-Controller/main.cpp" "/home/urop/Documents/GitHub/X-Touch-Controller/build/CMakeFiles/XTOUCH.dir/main.cpp.o"
+  "/home/urop/Documents/GitHub/X-Touch-Controller/src/ControlParameters.cpp" "/home/urop/Documents/GitHub/X-Touch-Controller/build/CMakeFiles/XTOUCH.dir/src/ControlParameters.cpp.o"
+  "/home/urop/Documents/GitHub/X-Touch-Controller/src/Fader.cpp" "/home/urop/Documents/GitHub/X-Touch-Controller/build/CMakeFiles/XTOUCH.dir/src/Fader.cpp.o"
+  "/home/urop/Documents/GitHub/X-Touch-Controller/src/XTouch.cpp" "/home/urop/Documents/GitHub/X-Touch-Controller/build/CMakeFiles/XTOUCH.dir/src/XTouch.cpp.o"
+  )
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
-# The set of dependency files which are needed:
-set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/yanran/X-Touch-Controller/main.cpp" "CMakeFiles/XTOUCH.dir/main.cpp.o" "gcc" "CMakeFiles/XTOUCH.dir/main.cpp.o.d"
-  "/home/yanran/X-Touch-Controller/src/ControlParameters.cpp" "CMakeFiles/XTOUCH.dir/src/ControlParameters.cpp.o" "gcc" "CMakeFiles/XTOUCH.dir/src/ControlParameters.cpp.o.d"
-  "/home/yanran/X-Touch-Controller/src/Fader.cpp" "CMakeFiles/XTOUCH.dir/src/Fader.cpp.o" "gcc" "CMakeFiles/XTOUCH.dir/src/Fader.cpp.o.d"
-  "/home/yanran/X-Touch-Controller/src/XTouch.cpp" "CMakeFiles/XTOUCH.dir/src/XTouch.cpp.o" "gcc" "CMakeFiles/XTOUCH.dir/src/XTouch.cpp.o.d"
+# The include file search paths:
+set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "../include"
   )
 
 # Targets to which this target links.
