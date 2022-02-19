@@ -25,7 +25,7 @@ public:
     double get_val_param_now(void);
     double get_val_param_save(void);
     unsigned char get_channel(void) {return this->channel;}
-    char* set_LCD_msg(void); // return LCD MIDI msg
+    unsigned char* set_LCD_msg(void); // return LCD MIDI msg
 
 private:
     // only save raw data

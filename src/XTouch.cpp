@@ -33,11 +33,12 @@ int XTouch::update(void) {
       return status;
    } else if (status >= 0) {
       // print and hold the fader position
-      printf("raw msg: 0x%x %x %x\n", buffer[0], buffer[1], buffer[2]);
+      // printf("raw msg: 0x%x %x %x\n", buffer[0], buffer[1], buffer[2]);
       if ((status = snd_rawmidi_write(this->midiout, buffer, 3)) < 0) {
          error("Problem writing to MIDI output: %s", snd_strerror(status));
       }
-      // send msg to all components
+      // send msg to all components & function
+      // wave_demo(buffer);
       this->fader0.set_val_now(buffer);
       this->fader1.set_val_now(buffer);
       this->fader2.set_val_now(buffer);
@@ -49,17 +50,28 @@ int XTouch::update(void) {
       this->fader8.set_val_now(buffer);
 
       // write display
-      // unsigned char* msg = this->fader3.set_LCD_msg();
-      // status = snd_rawmidi_write(midiout, msg, 15);
-      // if (status<0){
-      //    error("Problem writing to MIDI output: %s", snd_strerror(status));
-      // }
+      unsigned char* msg = fader3.set_LCD_msg();
+      status = snd_rawmidi_write(midiout, msg, 40);
+      // printf((char*)msg);
+      if (status<0){
+         error("Problem writing to MIDI output: %s", snd_strerror(status));
+      }
    }
    return status;
 }
 
-void XTouch::wave_demo() {
-    
+void XTouch::wave_demo(const unsigned char* buffer) {
+   
+   // static bool demo = false;
+
+   // if ((buffer[0]==0x90)&&(buffer[1]==0x54)){
+   //    demo = !demo;
+   // }
+
+   // if (demo)
+   // {
+
+   // }
     unsigned char fader[9][3] = {{0xE0, 60, 0},{0xE1, 60, 0},{0xE2, 60, 0},
          {0xE3, 60, 0},{0xE4, 60, 0},{0xE5, 60, 0},{0xE6, 60, 0},{0xE7, 60, 0},{0xE8, 60, 0}};
     

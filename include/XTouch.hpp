@@ -31,14 +31,14 @@ public:
     XTouch();
     ~XTouch();
 
-    // TODO: add
+    // TODO: add,,,,
     int    update(void);   // read + disperse data once
     void   save_current_parameters(void);
     void   load_saved_parameters(void);        // load parameters
     void   load_default_parameters(void);      // load default parameters
     // void   update_display(void);  update big LCD as menu if needed
 
-    void   wave_demo();
+    void   wave_demo(const unsigned char* buffer); // TODO: new thread for button control
     void   reset_faders();
     
     friend class Fader; // fader can write val and LCD
