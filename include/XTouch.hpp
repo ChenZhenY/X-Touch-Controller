@@ -11,6 +11,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <vector>
 
 #include <alsa/asoundlib.h>
 #include <math.h>
@@ -43,15 +44,17 @@ public:
     
     friend class Fader; // fader can write val and LCD
     // TODO: add objects in list
-    Fader fader0 = Fader(0xE0);
-    Fader fader1 = Fader(0xE1);
-    Fader fader2 = Fader(0xE2);
-    Fader fader3 = Fader(0xE3);
-    Fader fader4 = Fader(0xE4);
-    Fader fader5 = Fader(0xE5);
-    Fader fader6 = Fader(0xE6);
-    Fader fader7 = Fader(0xE7);
-    Fader fader8 = Fader(0xE8);  // main channel, without LCD
+    // Fader fader0 = Fader(0xE0);
+    // Fader fader1 = Fader(0xE1);
+    // Fader fader2 = Fader(0xE2);
+    // Fader fader3 = Fader(0xE3);
+    // Fader fader4 = Fader(0xE4);
+    // Fader fader5 = Fader(0xE5);
+    // Fader fader6 = Fader(0xE6);
+    // Fader fader7 = Fader(0xE7);
+    // Fader fader8 = Fader(0xE8);  // main channel, without LCD
+    // Fader* fader [9];            // contain all channel
+    vector<Fader> fader;
 
 private:
 

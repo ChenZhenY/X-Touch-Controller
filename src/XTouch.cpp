@@ -9,11 +9,15 @@ XTouch::XTouch() {
       error("Problem opening MIDI input: %s", snd_strerror(status));
       exit(1);
     }
-    reset_faders();
 
-    // set up faders and parameters mapping
+   // initialize fader list
+   for (int i=0; i<9; i++) {
+      fader.push_back(Fader(0xE0+i));
+   }
 
-    // TODO:set up LCM msg and host
+   reset_faders();
+
+   // TODO:set up LCM msg and host
 }
 
 XTouch::~XTouch() {
@@ -37,25 +41,20 @@ int XTouch::update(void) {
       if ((status = snd_rawmidi_write(this->midiout, buffer, 3)) < 0) {
          error("Problem writing to MIDI output: %s", snd_strerror(status));
       }
-      // send msg to all components & function
-      // wave_demo(buffer);
-      this->fader0.set_val_now(buffer);
-      this->fader1.set_val_now(buffer);
-      this->fader2.set_val_now(buffer);
-      this->fader3.set_val_now(buffer);
-      this->fader4.set_val_now(buffer);
-      this->fader5.set_val_now(buffer);
-      this->fader6.set_val_now(buffer);
-      this->fader7.set_val_now(buffer);
-      this->fader8.set_val_now(buffer);
 
-      // write display
-      unsigned char* msg = fader3.set_LCD_msg();
-      status = snd_rawmidi_write(midiout, msg, 40);
-      // printf((char*)msg);
-      if (status<0){
-         error("Problem writing to MIDI output: %s", snd_strerror(status));
+      // send new msg to all faders and update values to display
+      unsigned char* msg;
+      for (int i = 0; i<9; i++) {
+         fader[i].set_val_now(buffer);
+         if (fader[i].get_channel()<=0xe7) {      // we only have 8 LCD
+            msg = fader[i].set_LCD_msg();
+            status = snd_rawmidi_write(midiout, msg, 40);
+         }
+         if (status<0){
+            error("Problem writing to MIDI output: %s", snd_strerror(status));
+         }
       }
+
    }
    return status;
 }
