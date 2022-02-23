@@ -10,6 +10,8 @@ int main(int argc, char *argv[]) {
 
     XTouch Xcontroller;
 
+    // set up the parameters you want to control
+    // specify the name and lower/upper limit
     ControlParameters Kp("Kp", 0, 1001);
     ControlParameters Ki("Ki", -6, 6);
     ControlParameters Kd("Kd", 0, 101);
@@ -20,16 +22,16 @@ int main(int argc, char *argv[]) {
     ControlParameters cd("la", 0, 1001);
     ControlParameters we("lamd", 0, 1001);
 
-    // control param assigned to 9 channel
+    // assign control params to 9 slider channels
+    // note that only the first 8 channels has LCD display
     vector<ControlParameters*> fader_param_map = {&Kp, &Ki, &Kd, &om, &th, &la, &ca, &cd, &we}; 
-
     for (int i=0; i<9; i++) {
         Xcontroller.fader[i].param = fader_param_map[i];
     }
     
+    // update the input, output and display
     int status = -1;
     while (true) {
         status = Xcontroller.update();
-    }
-    
+    }  
 }
