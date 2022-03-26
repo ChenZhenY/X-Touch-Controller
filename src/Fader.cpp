@@ -15,6 +15,24 @@ Fader::~Fader()
     this->param = nullptr;
 }
 
+void Fader::command_handler(const unsigned char* buffer) {
+    // set val if updated
+    this->set_val_now(buffer);
+
+    int channel_index = this->get_channel() - 0xE0; // get the channel index
+    // handle button operation (only 8 channels)
+    // "rec": save current val, [90],[00-07],[7F/00] header,channel,up/down
+    if ((buffer[0]==0x90) && (buffer[1]==channel_index) && (buffer[2]==0x7F)) {
+        this->save_val_now();
+        printf("%s channel value is saved: %f\n", param->get_name().c_str(), get_val_param_save());
+    }
+    // "solo": set current val to rec val: [90],[08-0F],[7F/00]
+    if ((buffer[0]==0x90) && (buffer[1]==channel_index+0x08) && (buffer[2]==0x7F)) {
+        this->val_now = this->val_last_save;
+        printf("%s channel value is set to: %f \n", param->get_name().c_str(), get_val_param_now());
+    }
+}
+
 void Fader::set_val_now(const unsigned char* buffer) {
 
     if (buffer[0] == this->channel) {

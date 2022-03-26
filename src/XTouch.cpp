@@ -29,43 +29,51 @@ int XTouch::update(void) {
    int status = -1;
    unsigned char buffer [3];
    status = snd_rawmidi_read(midiin, buffer, 3);
-
+   // printf("raw msg: 0x%x %x %x\n", buffer[0], buffer[1], buffer[2]);
+   // handle reading fail
    if ((status < 0) && (status != -EBUSY) && (status != -EAGAIN)) {
       error("Problem reading MIDI input: %s",snd_strerror(status));
       return status;
-   } else if (status >= 0) {
-      // print and hold the fader position
-      // printf("raw msg: 0x%x %x %x\n", buffer[0], buffer[1], buffer[2]);
-      if ((status = snd_rawmidi_write(this->midiout, buffer, 3)) < 0) {
+   }
+
+   // send new msg to all faders and update values to display
+   unsigned char* msg;
+   unsigned char set_val [3];
+   for (int i = 0; i<9; i++) {
+      fader[i].command_handler(buffer);
+
+      // display value and name on LCD
+      if (fader[i].get_channel()<=0xe7) {      // we only have 8 LCD
+         msg = fader[i].set_LCD_msg();
+         status = snd_rawmidi_write(midiout, msg, 40);
+      }
+      if (status<0){
          error("Problem writing to MIDI output: %s", snd_strerror(status));
       }
 
-      // send new msg to all faders and update values to display
-      unsigned char* msg;
-      for (int i = 0; i<9; i++) {
-         fader[i].set_val_now(buffer);
-         if (fader[i].get_channel()<=0xe7) {      // we only have 8 LCD
-            msg = fader[i].set_LCD_msg();
-            status = snd_rawmidi_write(midiout, msg, 40);
-         }
-         if (status<0){
-            error("Problem writing to MIDI output: %s", snd_strerror(status));
-         }
+      // set fader position
+      unsigned short int val_now = fader[i].get_val_now();
+      set_val[0] = fader[i].get_channel();
+      set_val[1] = (unsigned char)fader[i].get_val_now() & 127;
+      set_val[2] = fader[i].get_val_now() >> 7;
+      // printf("buffer %x my %x \n", buffer[1], set_val[1]);
+      if ((status = snd_rawmidi_write(this->midiout, set_val, 3)) < 0) {
+         error("Problem writing to MIDI output: %s", snd_strerror(status));
       }
+   }
 
-      // TODO: send LCM msg
-      if (!lcm.good()) {
-         printf("lcm fail to set up");
-      }
-      else {
-         for (int i=0; i<8; i++) {
-            data_sent.channel_name[i] = fader[i].param->get_name();
-            // printf("name  %s", fader[i].param->get_name().c_str());
-            data_sent.channel_value[i]= fader[i].get_val_param_now();
-         }
-         lcm.publish("XTouch", &data_sent);
-      }
 
+   // send LCM msg
+   if (!lcm.good()) {
+      printf("lcm fail to set up");
+   }
+   else {
+      for (int i=0; i<8; i++) {
+         data_sent.channel_name[i] = fader[i].param->get_name();
+         // printf("name  %s", fader[i].param->get_name().c_str());
+         data_sent.channel_value[i]= fader[i].get_val_param_now();
+      }
+      lcm.publish("XTouch", &data_sent);
    }
    return status;
 }

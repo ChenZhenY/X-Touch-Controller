@@ -19,10 +19,12 @@ public:
     
     Fader(unsigned char channel);
     ~Fader();
-    void set_val_now(const unsigned char* buffer); // process input MIDI
-    void set_val_now(int input);                   // TODO: process input LCM msg
+    void command_handler(const unsigned char* buffer); // process MIDI input
+    void set_val_now(const unsigned char* buffer);     // set fader value from MIDI input
+    void set_val_now(int input);                       // TODO: process input LCM msg
     void save_val_now(void) {this->val_last_save = this->val_now;}  // save current value
-    double get_val_param_now(void);
+    unsigned short int get_val_now(void){return val_now;}
+    double get_val_param_now(void);                    // convert raw value to paramter value 
     double get_val_param_save(void);
     unsigned char get_channel(void) {return this->channel;}
     // void set_channel(unsigned char channel) {this->channel = channel;}
