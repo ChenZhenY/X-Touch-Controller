@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=gnu99 -Wno-format-zero-length  -rdynamic CMakeFiles/lcm-source.dir/lcm-source.c.o  -o lcm-source -Wl,-rpath,/home/urop/lcm-1.4.0/build/lcm: ../lcm/liblcm.so.1.4.0 

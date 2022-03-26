@@ -123,6 +123,19 @@ XTOUCH/fast:
 	$(MAKE) -f CMakeFiles/XTOUCH.dir/build.make CMakeFiles/XTOUCH.dir/build
 .PHONY : XTOUCH/fast
 
+#=============================================================================
+# Target rules for targets named lcm_test
+
+# Build rule for target.
+lcm_test: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 lcm_test
+.PHONY : lcm_test
+
+# fast build rule for target.
+lcm_test/fast:
+	$(MAKE) -f CMakeFiles/lcm_test.dir/build.make CMakeFiles/lcm_test.dir/build
+.PHONY : lcm_test/fast
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -231,6 +244,33 @@ src/XTouch.cpp.s:
 	$(MAKE) -f CMakeFiles/XTOUCH.dir/build.make CMakeFiles/XTOUCH.dir/src/XTouch.cpp.s
 .PHONY : src/XTouch.cpp.s
 
+src/lcm_test.o: src/lcm_test.cpp.o
+
+.PHONY : src/lcm_test.o
+
+# target to build an object file
+src/lcm_test.cpp.o:
+	$(MAKE) -f CMakeFiles/lcm_test.dir/build.make CMakeFiles/lcm_test.dir/src/lcm_test.cpp.o
+.PHONY : src/lcm_test.cpp.o
+
+src/lcm_test.i: src/lcm_test.cpp.i
+
+.PHONY : src/lcm_test.i
+
+# target to preprocess a source file
+src/lcm_test.cpp.i:
+	$(MAKE) -f CMakeFiles/lcm_test.dir/build.make CMakeFiles/lcm_test.dir/src/lcm_test.cpp.i
+.PHONY : src/lcm_test.cpp.i
+
+src/lcm_test.s: src/lcm_test.cpp.s
+
+.PHONY : src/lcm_test.s
+
+# target to generate assembly for a file
+src/lcm_test.cpp.s:
+	$(MAKE) -f CMakeFiles/lcm_test.dir/build.make CMakeFiles/lcm_test.dir/src/lcm_test.cpp.s
+.PHONY : src/lcm_test.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -238,8 +278,9 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
-	@echo "... XTOUCH"
 	@echo "... edit_cache"
+	@echo "... XTOUCH"
+	@echo "... lcm_test"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
@@ -252,6 +293,9 @@ help:
 	@echo "... src/XTouch.o"
 	@echo "... src/XTouch.i"
 	@echo "... src/XTouch.s"
+	@echo "... src/lcm_test.o"
+	@echo "... src/lcm_test.i"
+	@echo "... src/lcm_test.s"
 .PHONY : help
 
 

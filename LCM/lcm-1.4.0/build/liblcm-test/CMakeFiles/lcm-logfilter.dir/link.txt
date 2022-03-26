@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=gnu99 -Wno-format-zero-length  -rdynamic CMakeFiles/lcm-logfilter.dir/lcm-logfilter.c.o  -o lcm-logfilter -Wl,-rpath,/home/urop/lcm-1.4.0/build/lcm: ../lcm/liblcm.so.1.4.0 /usr/lib/x86_64-linux-gnu/libglib-2.0.so 

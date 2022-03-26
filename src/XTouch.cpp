@@ -16,8 +16,6 @@ XTouch::XTouch() {
    }
 
    reset_faders();
-
-   // TODO:set up LCM msg and host
 }
 
 XTouch::~XTouch() {
@@ -53,6 +51,19 @@ int XTouch::update(void) {
          if (status<0){
             error("Problem writing to MIDI output: %s", snd_strerror(status));
          }
+      }
+
+      // TODO: send LCM msg
+      if (!lcm.good()) {
+         printf("lcm fail to set up");
+      }
+      else {
+         for (int i=0; i<8; i++) {
+            data_sent.channel_name[i] = fader[i].param->get_name();
+            // printf("name  %s", fader[i].param->get_name().c_str());
+            data_sent.channel_value[i]= fader[i].get_val_param_now();
+         }
+         lcm.publish("XTouch", &data_sent);
       }
 
    }

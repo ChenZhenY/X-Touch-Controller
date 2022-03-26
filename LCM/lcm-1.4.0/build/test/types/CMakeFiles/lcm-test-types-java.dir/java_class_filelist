@@ -1,0 +1,11 @@
+lcmtest/bools_t.class
+lcmtest/byte_array_t.class
+lcmtest/comments_t.class
+lcmtest/exampleconst_t.class
+lcmtest/multidim_array_t.class
+lcmtest/node_t.class
+lcmtest/primitives_list_t.class
+lcmtest/primitives_t.class
+lcmtest2/another_type_t.class
+lcmtest2/cross_package_t.class
+lcmtest3/arrays_t.class

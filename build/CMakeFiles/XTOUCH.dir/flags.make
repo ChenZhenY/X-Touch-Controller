@@ -6,5 +6,5 @@ CXX_FLAGS =  -g -lasound -g
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/urop/Documents/GitHub/X-Touch-Controller/include 
+CXX_INCLUDES = -I/home/urop/Documents/GitHub/X-Touch-Controller/include -I/home/urop/Documents/GitHub/X-Touch-Controller/LCM/lcm-1.4.0/lcm -I/home/urop/Documents/GitHub/X-Touch-Controller/LCM/XTouchMsg 
 

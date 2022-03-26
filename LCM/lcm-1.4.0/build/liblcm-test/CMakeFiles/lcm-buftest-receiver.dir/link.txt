@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=gnu99 -Wno-format-zero-length  -rdynamic CMakeFiles/lcm-buftest-receiver.dir/buftest-receiver.c.o  -o lcm-buftest-receiver -Wl,-rpath,/home/urop/lcm-1.4.0/build/lcm ../lcm/liblcm.so.1.4.0 /usr/lib/x86_64-linux-gnu/libglib-2.0.so 

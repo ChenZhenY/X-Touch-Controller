@@ -1,0 +1,1 @@
+/usr/bin/c++   -Wno-format-zero-length  -rdynamic CMakeFiles/test-cpp-client.dir/client.cpp.o CMakeFiles/test-cpp-client.dir/common.cpp.o  -o test-cpp-client -Wl,-rpath,/home/urop/lcm-1.4.0/build/lcm:/home/urop/lcm-1.4.0/build/test/gtest ../../lcm/liblcm.so.1.4.0 ../gtest/libgtest_main.so ../gtest/libgtest.so -lpthread 

@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=gnu99 -Wno-format-zero-length  -rdynamic CMakeFiles/lcm-logplayer.dir/lcm_logplayer.c.o  -o lcm-logplayer -Wl,-rpath,/home/urop/lcm-1.4.0/build/lcm: ../lcm/liblcm.so.1.4.0 

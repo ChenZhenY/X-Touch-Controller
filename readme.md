@@ -1,8 +1,12 @@
 # X-TOUCH-CONTROLLER
+Zhenyang Chen
+## Intro:
+Tuning your robot parameters like a musician!
 
 ## TODO:
-- [ ] Add LCM communication for sending parameters
+- [x] Add LCM communication for sending parameters
 - [ ] Add buttons to store recent parameters/ load parameters
+- [ ] Add scientific representation to the program
 - [ ] Read parameters from txt or other program, without changing program. (also need to confirm this with Robosoftware)
 
 ## Usage:

@@ -1,0 +1,7 @@
+package XTouchMsg;
+
+struct XTouch_Parameter
+{
+    string   channel_name[8];
+    double   channel_value[8];
+}

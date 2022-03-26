@@ -21,6 +21,9 @@
 // #include <Rotator.hpp>
 // #include <Button.hpp>
 
+#include "lcm/lcm-cpp.hpp"
+#include "XTouch_Parameter.hpp"
+
 #define PI 3.14159265
 
 using namespace std;
@@ -43,7 +46,6 @@ public:
     void   reset_faders();
     
     friend class Fader; // fader can write val and LCD
-    // TODO: add objects in list
     // Fader fader0 = Fader(0xE0);
     // Fader fader1 = Fader(0xE1);
     // Fader fader2 = Fader(0xE2);
@@ -58,10 +60,8 @@ public:
 
 private:
 
-    /* 
-    LCM message = 
-    LCM host = 
-    */
+    lcm::LCM lcm;
+    XTouchMsg::XTouch_Parameter data_sent;
 
     // set up MIDI communication
     snd_rawmidi_t* midiin = nullptr;

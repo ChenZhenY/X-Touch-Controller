@@ -1,0 +1,1 @@
+/usr/bin/cc  -std=gnu99 -Wno-format-zero-length  -rdynamic CMakeFiles/lcm-sink.dir/lcm-sink.c.o  -o lcm-sink -Wl,-rpath,/home/urop/lcm-1.4.0/build/lcm: ../lcm/liblcm.so.1.4.0 

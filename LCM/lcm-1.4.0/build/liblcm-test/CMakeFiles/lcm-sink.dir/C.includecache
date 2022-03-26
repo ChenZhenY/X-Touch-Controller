@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+..//lcm/lcm.h
+stdint.h
+-
+lcm_version.h
+../lcm/lcm_version.h
+lcm_export.h
+../lcm/lcm_export.h
+eventlog.h
+../lcm/eventlog.h
+
+../lcm/eventlog.h
+stdint.h
+-
+stdio.h
+-
+lcm_export.h
+../lcm/lcm_export.h
+
+../lcm/lcm_version.h
+
+/home/urop/lcm-1.4.0/liblcm-test/lcm-sink.c
+stdio.h
+-
+stdlib.h
+-
+signal.h
+-
+lcm/lcm.h
+-
+
+lcm/lcm_export.h
+
