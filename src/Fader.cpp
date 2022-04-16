@@ -5,7 +5,7 @@ void error(const char *format, ...);
 Fader::Fader(unsigned char channel): channel(channel)
 {
     // 9 faders total, which should have different channel strip
-    this->val_now = 0;
+    this->val_now = 8192;    // default set to mid point
     this->val_last_save = 0;
     this->param = nullptr;
 }
@@ -18,18 +18,22 @@ Fader::~Fader()
 void Fader::command_handler(const unsigned char* buffer) {
     // set val if updated
     this->set_val_now(buffer);
+    // update val to menu_obj
+    menu_obj[param_name][param_xyz] = get_val_param_now();
 
     int channel_index = this->get_channel() - 0xE0; // get the channel index
     // handle button operation (only 8 channels)
     // "rec": save current val, [90],[00-07],[7F/00] header,channel,up/down
     if ((buffer[0]==0x90) && (buffer[1]==channel_index) && (buffer[2]==0x7F)) {
         this->save_val_now();
-        printf("%s channel value is saved: %f\n", param->get_name().c_str(), get_val_param_save());
+        // printf("%s channel value is saved: %f\n", param->get_name().c_str(), get_val_param_save());
+        cout<<param_name<<" "<<param_xyz<<" channel value is saved: "<<get_val_param_save()<<endl;
     }
     // "solo": set current val to rec val: [90],[08-0F],[7F/00]
     if ((buffer[0]==0x90) && (buffer[1]==channel_index+0x08) && (buffer[2]==0x7F)) {
         this->val_now = this->val_last_save;
-        printf("%s channel value is set to: %f \n", param->get_name().c_str(), get_val_param_now());
+        // printf("%s channel value is set to: %f \n", param->get_name().c_str(), get_val_param_now());
+        cout<<param_name<<" "<<param_xyz<<" channel value is set to: "<<get_val_param_save()<<endl;
     }
 }
 
@@ -42,13 +46,17 @@ void Fader::set_val_now(const unsigned char* buffer) {
 }
 
 double Fader::get_val_param_now(void) {
-    double diff = double(this->param->get_ub() - this->param->get_lb());
-    return double((this->val_now/16384.0)*diff) + double(this->param->get_lb());
+    double range = menu_obj[param_name]["range"];
+    return double((val_now-8192.0)/8192.0*range) + double(init_val[param_xyz]);
+    // double diff = double(this->param->get_ub() - this->param->get_lb());
+    // return double((this->val_now/16384.0)*diff) + double(this->param->get_lb());
 }
 
 double Fader::get_val_param_save(void) {
-    double diff = double(this->param->get_ub() - this->param->get_lb());
-    return double((this->val_last_save/16384.0)*diff) + double(this->param->get_lb());
+    double range = menu_obj[param_name]["range"];
+    return double((val_last_save-8192.0)/8192.0*range) + double(init_val[param_xyz]);
+    // double diff = double(this->param->get_ub() - this->param->get_lb());
+    // return double((this->val_last_save/16384.0)*diff) + double(this->param->get_lb());
 }
 
 unsigned char* Fader::set_LCD_msg(void) {
@@ -64,7 +72,8 @@ unsigned char* Fader::set_LCD_msg(void) {
     header_down[6] = (this->channel-0xe0)*7 + 0x38;
     
     // msg sent follows ascii
-    const char* name = this->param->get_name().c_str();
+    string temp_name = param_name + param_xyz;
+    const char* name = temp_name.c_str();
     double value = this->get_val_param_now();
     
     // add number and control value to the content

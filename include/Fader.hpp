@@ -11,12 +11,24 @@
 
 #include <alsa/asoundlib.h>
 #include "ControlParameters.hpp"
+#include <string>
+#include <json.hpp>
+
+using namespace std;
+using json = nlohmann::json;
+
+extern json menu_obj; // where we keep all the parameter data
 
 class Fader
 {
 public:
+    // option 1: using param class
     ControlParameters* param;
-    
+    // option 2: using json to load class
+    string param_name;
+    string param_xyz;      // only used for param obj with x=0 y=1 z=2 value
+    json init_val;    // the initial x y z value from json, which will be set as the mid position of fader
+
     Fader(unsigned char channel);
     ~Fader();
     void command_handler(const unsigned char* buffer); // process MIDI input
@@ -32,7 +44,7 @@ public:
 
 private:
     // only save raw data
-    unsigned short int val_now;       // lastest raw value from MIDI 0-16384
+    unsigned short int val_now;       // lastest raw value from MIDI 0-16384, HSB 7bits, LSB 7bits
     unsigned short int val_last_save; // raw value that last time saved
     const unsigned char channel;      // the first byte of msg, 0xE0-E8, can't be changed
 };

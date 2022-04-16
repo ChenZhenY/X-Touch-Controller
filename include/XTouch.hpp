@@ -3,7 +3,6 @@
  * @brief define all the members and functionalities of XTouch controller.
  * read from XTouch using alsa MIDI under Mackie Control. Send data to RS.
  * display result on LCD display.
- * @TODO: wrap up parameters in file or change using LCM
  */
 
 #ifndef XTOUCH
@@ -23,6 +22,7 @@
 
 #include "lcm/lcm-cpp.hpp"
 #include "XTouch_Parameter.hpp"
+#include "humanoid_menu_data_lcmt.hpp"
 
 #define PI 3.14159265
 
@@ -35,33 +35,32 @@ public:
     XTouch();
     ~XTouch();
 
-    // TODO: add,,,,
-    int    update(void);   // read + disperse data once
+    friend class Fader; // fader can write val and LCD
+    vector<Fader> fader;
+
+    // TODO: add helper functions
     void   save_current_parameters(void);
     void   load_saved_parameters(void);        // load parameters
     void   load_default_parameters(void);      // load default parameters
-    // void   update_display(void);  update big LCD as menu if needed
+
+    int    update(void);   // main update loop
+    void   midiin_handler(const unsigned char* buffer);   // handle input midi msg, send to different channel
+    void   update_display(void);   // update fader LCD, add big LCD if needed
+    void   update_fader_pos(void); // update fader position
+    void   publish_to_lcm(void);   // send lcm msg
 
     void   wave_demo(const unsigned char* buffer); // TODO: new thread for button control
-    void   reset_faders();
     
-    friend class Fader; // fader can write val and LCD
-    // Fader fader0 = Fader(0xE0);
-    // Fader fader1 = Fader(0xE1);
-    // Fader fader2 = Fader(0xE2);
-    // Fader fader3 = Fader(0xE3);
-    // Fader fader4 = Fader(0xE4);
-    // Fader fader5 = Fader(0xE5);
-    // Fader fader6 = Fader(0xE6);
-    // Fader fader7 = Fader(0xE7);
-    // Fader fader8 = Fader(0xE8);  // main channel, without LCD
-    // Fader* fader [9];            // contain all channel
-    vector<Fader> fader;
+    void   init_faders(vector<string>* key_obj);
+    void   reset_faders();     // reset faders to 0 position
+    void   reset_faders_mid(); // reset faders to midlle position
+
 
 private:
 
     lcm::LCM lcm;
-    XTouchMsg::XTouch_Parameter data_sent;
+    XTouchMsg::XTouch_Parameter data_sent;        // for test
+    XTouchMsg::humanoid_menu_data_lcmt menu_data; // for RS menu data
 
     // set up MIDI communication
     snd_rawmidi_t* midiin = nullptr;

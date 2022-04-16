@@ -5,33 +5,56 @@
  */
 
 #include "XTouch.hpp"
+#include <fstream>
+#include <json.hpp>
+
+using json = nlohmann::json;
+
+json menu_obj;  // all the object (assume all contain x, y, z values)
+json menu_bool; // all the boolean values, using buttons
+json menu_num;  // all single number values
+
+// keep track of the key name of parameters
+vector<string> key_obj;
+vector<string> key_bool;
+vector<string> key_num;
+
+void setup_data_from_json(json menu_init);
 
 int main(int argc, char *argv[]) {
 
+    std::ifstream in("../default_config_humanoid.json");
+    json menu_init = json::parse(in);
+    setup_data_from_json(menu_init);
+
     XTouch Xcontroller;
+    Xcontroller.init_faders(&key_obj);
+    Xcontroller.update_display();
 
-    // set up the parameters you want to control
-    // specify the name and lower/upper limit
-    ControlParameters Kp("Kp", 0, 1001);
-    ControlParameters Ki("Ki", -6, 6);
-    ControlParameters Kd("Kd", 0, 101);
-    ControlParameters om("omega", 0, 10010);
-    ControlParameters th("theta", -10, 1001);
-    ControlParameters la("lambda", 0, 1001);
-    ControlParameters ca("lda", 0, 1001);
-    ControlParameters cd("la", 0, 1001);
-    ControlParameters we("lamd", 0, 1001);
-
-    // assign control params to 9 slider channels
-    // note that only the first 8 channels has LCD display
-    vector<ControlParameters*> fader_param_map = {&Kp, &Ki, &Kd, &om, &th, &la, &ca, &cd, &we}; 
-    for (int i=0; i<9; i++) {
-        Xcontroller.fader[i].param = fader_param_map[i];
-    }
-    
-    // update the input, output and display
-    int status = -1;
-    while (true) {
+    int status = 1;
+    while (status) {
         status = Xcontroller.update();
-    }  
+    }
+    return 0;
+}
+
+void setup_data_from_json(json menu_init) {
+    // set different type of parameters (bool, obj, num) to different jsons
+    json temp;
+    for(json::iterator it= menu_init.begin(); it!=menu_init.end(); ++it){
+        if (it.value().is_object()) {
+            temp = it.value();
+            temp["range"] = 10.0;        // TODO: setup half range value in original json??
+            menu_obj[it.key()] = temp;
+            key_obj.push_back(it.key());
+        }
+        if (it.value().is_number()) {
+            menu_num[it.key()] = it.value();
+            key_num.push_back(it.key());
+        }
+        if (it.value().is_boolean()) {
+            menu_bool[it.key()] = it.value();
+            key_bool.push_back(it.key());
+        }
+    }
 }

@@ -2,7 +2,7 @@
 
 #include "lcm/lcm-cpp.hpp"
 #include "XTouch_Parameter.hpp"
-
+#include "humanoid_menu_data_lcmt.hpp"
 
 class Handler 
 {
@@ -29,14 +29,26 @@ class Handler
             // printf("  name        = '%s'\n", msg->name.c_str());
             // printf("  enabled     = %d\n", msg->enabled);
         }
+
+        void handleMenuMessage(const lcm::ReceiveBuffer* rbuf,
+                const std::string& chan, 
+                const XTouchMsg::humanoid_menu_data_lcmt* msg)
+        {
+            int i;
+            // printf("Received message on channel \"%s\":\n", chan.c_str());
+            // printf("  timestamp   = %lld\n", (long long)msg->timestamp);
+            printf("Kd_body x = %f\n", msg->Kd_body[0]);
+            printf("Kd_cam x = %f\n", msg->Kd_cam[0]);
+        }
 };
+
 int main(int argc, char** argv)
 {
     lcm::LCM lcm;
     if(!lcm.good())
         return 1;
     Handler handlerObject;
-    lcm.subscribe("XTouch", &Handler::handleMessage, &handlerObject);
+    lcm.subscribe("XTouch", &Handler::handleMenuMessage, &handlerObject);
     while(0 == lcm.handle());
     return 0;
 }
