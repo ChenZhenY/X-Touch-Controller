@@ -2,6 +2,7 @@
     "files.associations": {
         "time.h": "c",
         "asoundlib.h": "c",
-        "rawmidi.h": "c"
+        "rawmidi.h": "c",
+        "iosfwd": "cpp"
     }
 }

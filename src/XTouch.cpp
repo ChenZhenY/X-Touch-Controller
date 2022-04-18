@@ -53,6 +53,18 @@ void XTouch::midiin_handler(const unsigned char* buffer) {
       fader[i].command_handler(buffer);
    }
 
+   // MARKER to record the json parameters
+   time_t raw_time;
+   time(&raw_time);
+   string folder = "../json_saved";
+   string header = "/params ";
+   string suffix = ".json";
+   string filename =  folder + header + ctime(&raw_time) + suffix;
+   if ((buffer[0]==0x90) && (buffer[1]==0x54) && (buffer[2] == 0x7F)) {
+      ofstream o(filename);
+      o<<menu_obj<<endl;
+   }
+
    // TODO: update buttons and encoders
 }
 
