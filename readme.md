@@ -7,6 +7,7 @@ Tuning your robot parameters like a musician!
 - [x] Add LCM communication for sending parameters
 - [x] Add buttons to store recent parameters/ load parameters
 - [x] Read parameters from json (RS), load all the faders value.
+- [x] add select button to switch x y z channel for fader
 - [ ] add encoder to choose which parameters to display on faders (in midihandler function and make sure each fader corresponds to one param name/value)
 - [x] save json setting with button
 - [ ] consider adding "range" param in the json file (is hardcoded in ```main.cpp```currently)
@@ -22,6 +23,16 @@ Read and set initial position from json. Publish updated value from slider to me
 1. clean the build directory and build the program ```cd ./build & cmake .. & make```. Excutable is ```./XTOUCH```
 2. (will be updated): The program first need to know what parameters you want to tune and their ranges, and then map them to corresponding sliders channels (will support button later). So you need to specify the parameters and their mapping in ```main.cpp```.
 3. New parameters in lcm msg: the program can fetch the new parameters automatically (obj, num and bool). But if you want to send them, you need to add them in LCM msg which is encapsuled in publish_to_lcm() in XTouch class.
+4. Faders:
+   
+   **rec** button: save the current value *temporarily* which will not be written to json.
+
+   **solo** button: restore the parameters value saved before.
+   
+   **select** button: select the x y z components of the parameters. Note that once you select another component, the saved value for current component will be erased.
+5. Main pannel:
+   
+   **Marker** button: write the json file which saves all the menu_obj value (those with xyz components) to ./json_saved foler
 
 ## Troubleshooting:
 1. XTouch connection. We can build the MIDI connection between xtouch and PC with USB cable. And no extra drivers are required (ubuntu 18.04). You can check the connection and input signal by running these in terminal  ```amidi -l/ --dump -p *port``` or ```aseqdump -l/ -p *port``` to make sure you can read the raw data.
