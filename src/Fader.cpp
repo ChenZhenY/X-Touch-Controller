@@ -21,8 +21,9 @@ void Fader::command_handler(const unsigned char* buffer) {
     // update val to menu_obj
     menu_obj[param_name][param_xyz] = get_val_param_now();
 
-    int channel_index = this->get_channel() - 0xE0; // get the channel index
+    int channel_index = get_channel() - 0xE0; // get the channel index
     // handle button operation (only 8 channels)
+
     // "rec": save current val, [90],[00-07],[7F/00] header,channel,up/down
     if ((buffer[0]==0x90) && (buffer[1]==channel_index) && (buffer[2]==0x7F)) {
         this->save_val_now();
@@ -34,6 +35,17 @@ void Fader::command_handler(const unsigned char* buffer) {
         this->val_now = this->val_last_save;
         // printf("%s channel value is set to: %f \n", param->get_name().c_str(), get_val_param_now());
         cout<<param_name<<" "<<param_xyz<<" channel value is set to: "<<get_val_param_save()<<endl;
+    }
+    // "select": change between the x,y,z values in the parameters
+    if ((buffer[0]==0x90) && (buffer[1]==channel_index+0x18) && (buffer[2]==0x7F)) {
+        if (param_xyz == "x") param_xyz="y";
+        else if (param_xyz == "y") param_xyz="z";
+        else if (param_xyz == "z") param_xyz="x";
+        // update fader value
+        double param_now = menu_obj[param_name][param_xyz];
+        double param_init= init_val[param_xyz];
+        double param_range= menu_obj[param_name]["range"];
+        val_now = 8192 + int((param_now-param_init)/param_range*8191);
     }
 }
 

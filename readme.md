@@ -8,7 +8,7 @@ Tuning your robot parameters like a musician!
 - [x] Add buttons to store recent parameters/ load parameters
 - [x] Read parameters from json (RS), load all the faders value.
 - [ ] add encoder to choose which parameters to display on faders (in midihandler function and make sure each fader corresponds to one param name/value)
-- [ ] save json setting with button
+- [x] save json setting with button
 - [ ] consider adding "range" param in the json file (is hardcoded in ```main.cpp```currently)
 - [ ] Add scientific representation to the program
 
