@@ -1,2 +1,2 @@
-build/*
-json_saved/*
+/build/**
+/json_saved/*
