@@ -48,6 +48,7 @@ public:
     void   update_display(void);   // update fader LCD, add big LCD if needed
     void   update_fader_pos(void); // update fader position
     void   publish_to_lcm(void);   // send lcm msg
+    // void   update_main_LCD()
 
     void   wave_demo(const unsigned char* buffer); // TODO: new thread for button control
     

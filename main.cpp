@@ -11,6 +11,7 @@
 using json = nlohmann::json;
 
 json menu_obj;  // all the object (assume all contain x, y, z values)
+json menu_obj_init; // initial obj values
 json menu_bool; // all the boolean values, using buttons
 json menu_num;  // all single number values
 
@@ -46,6 +47,7 @@ void setup_data_from_json(json menu_init) {
             temp = it.value();
             temp["range"] = 10.0;        // TODO: setup half range value in original json??
             menu_obj[it.key()] = temp;
+            menu_obj_init[it.key()] = temp;
             key_obj.push_back(it.key());
         }
         if (it.value().is_number()) {

@@ -11,7 +11,7 @@ XTouch::XTouch() {
     }
 
    // initialize fader list
-   for (int i=0; i<9; i++) {
+   for (int i=0; i<8; i++) {
       fader.push_back(Fader(0xE0+i));
    }
    // set fader to midlle places
@@ -49,7 +49,7 @@ void XTouch::midiin_handler(const unsigned char* buffer) {
    // handle input midi msg, send to different channel
 
    // 9 faders update
-   for (int i = 0; i<9; i++) {
+   for (int i = 0; i<8; i++) {
       fader[i].command_handler(buffer);
    }
 
@@ -65,6 +65,33 @@ void XTouch::midiin_handler(const unsigned char* buffer) {
       o<<menu_obj<<endl;
    }
 
+   // Mute on each fader to select fine-tune encoder
+   static int fine_tune = 0;
+   if ((buffer[0]==0x90) && (buffer[2] == 0x7F))
+   {
+      if ((buffer[1]>=0x10) && (buffer[1]<=0x17)) // mute indices
+      {
+         fine_tune = buffer[1] - 0x10;
+      }
+   }
+   if ((buffer[0]==0xB0) && (buffer[1] == 0x3C))  // fine-tune big encoder
+   {
+      switch (buffer[2]){
+         case 0x01:  // clockwise, add value
+             if (fader[fine_tune].val_now<=16370)
+             {
+                fader[fine_tune].val_now += 10;
+             }
+             break;
+         case 0x41:
+             if (fader[fine_tune].val_now>=11)
+             {
+                fader[fine_tune].val_now -= 10;
+             }
+             break;
+      }
+      menu_obj[fader[fine_tune].param_name][fader[fine_tune].param_xyz] = fader[fine_tune].get_val_param_now();
+   }
    // TODO: update buttons and encoders
 }
 
@@ -81,8 +108,6 @@ void XTouch::update_display(void) {
          error("Problem writing to MIDI output: %s", snd_strerror(status));
       }
    }
-
-   // TODO: add big LCD if needed
 }
 
 void XTouch::update_fader_pos(void) {
@@ -90,7 +115,7 @@ void XTouch::update_fader_pos(void) {
 
    int status = -1;
    unsigned char set_val [3];
-   for (int i=0; i<9; i++) {
+   for (int i=0; i<8; i++) {
       // set fader position
       unsigned short int val_now = fader[i].get_val_now();
       set_val[0] = fader[i].get_channel();
@@ -297,7 +322,7 @@ int XTouch::get_Xtouch_device_number(int card) {
 void XTouch::init_faders(vector<string>* key_obj) {
    // initialize fader value
    string name;
-   for (int i=0; i<9; i++) {
+   for (int i=0; i<8; i++) {
       if (i<key_obj->size()){
          name = key_obj->at(i);
          fader[i].param_name = name;

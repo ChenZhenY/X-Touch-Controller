@@ -16,14 +16,45 @@ Fader::~Fader()
 }
 
 void Fader::command_handler(const unsigned char* buffer) {
+
+    // enocder to select params:
+    int channel_index = get_channel() - 0xE0; // get the channel index
+    if ((buffer[0]==0xB0) && (buffer[1]==channel_index+0x10))
+    {
+        param_xyz = "x";
+        switch (buffer[2]){
+            case 0x01:
+                param_name = key_obj[8];
+                key_obj.push_back(key_obj[channel_index]);  // put original name to back
+                key_obj[channel_index] = param_name;         // set new name at pos
+                key_obj.erase(key_obj.begin()+8);                               // erase name at 8
+                break;
+            case 0x41:
+                param_name = key_obj.back();
+                key_obj.pop_back();                          // erase name
+                key_obj.insert(key_obj.begin()+8, key_obj[channel_index]);   // put original name to back
+                key_obj[channel_index] = param_name;         // set new name at pos
+                break;
+        }
+        // Setup new initial value and actual value
+        init_val["x"]  = menu_obj_init[param_name]["x"];
+        init_val["y"]  = menu_obj_init[param_name]["y"];
+        init_val["z"]  = menu_obj_init[param_name]["z"];
+
+        // update fader value
+        double param_now = menu_obj[param_name][param_xyz];
+        double param_init= init_val[param_xyz];
+        double param_range= menu_obj[param_name]["range"];
+        val_now = 8192 + int((param_now-param_init)/param_range*8191);
+    }
+
+
     // set val if updated
     this->set_val_now(buffer);
     // update val to menu_obj
     menu_obj[param_name][param_xyz] = get_val_param_now();
 
-    int channel_index = get_channel() - 0xE0; // get the channel index
     // handle button operation (only 8 channels)
-
     // "rec": save current val, [90],[00-07],[7F/00] header,channel,up/down
     if ((buffer[0]==0x90) && (buffer[1]==channel_index) && (buffer[2]==0x7F)) {
         this->save_val_now();

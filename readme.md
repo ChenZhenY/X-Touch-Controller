@@ -20,16 +20,21 @@ Read and set initial position from json. Publish updated value from slider to me
 3. send new update value
    
 ## Usage:
-1. clean the build directory and build the program ```cd ./build & cmake .. & make```. Excutable is ```./XTOUCH```
+1. create a build folder and build the program: ```cd ./build & cmake .. & make```. Excutable is ```./XTOUCH``` in /build.
 2. (will be updated): The program first need to know what parameters you want to tune and their ranges, and then map them to corresponding sliders channels (will support button later). So you need to specify the parameters and their mapping in ```main.cpp```.
-3. New parameters in lcm msg: the program can fetch the new parameters automatically (obj, num and bool). But if you want to send them, you need to add them in LCM msg which is encapsuled in publish_to_lcm() in XTouch class.
+3. New parameters in lcm msg: the program can fetch the new parameters automatically (obj, num and bool). But if you want to send them, you need to add them in LCM msg which is encapsuled in publish_to_lcm() in XTouch class. Make sure the key_obj, with x y z properties, and the parameter.json has at least ten key_obj parameters.
 4. Faders:
    
    **rec** button: save the current value *temporarily* which will not be written to json.
 
    **solo** button: restore the parameters value saved before.
-   
+
+   **mute** button: fine tune parameters in this fader channel with 10x accuracy. After clicking this button, use the **largest encoder** to tune the parameter.
+  
    **select** button: select the x y z components of the parameters. Note that once you select another component, the saved value for current component will be erased.
+
+   **encoder** : select the parameter you would like to display on the DJ pad.
+
 5. Main pannel:
    
    **Marker** button: write the json file which saves all the menu_obj value (those with xyz components) to ./json_saved foler
